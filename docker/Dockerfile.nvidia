@@ -1,12 +1,13 @@
 # Set the base image according to the selected device
 # FROM nvidia/cuda:11.4.0-cudnn8-runtime-ubuntu20.04
 # TODO: Experiment using this base image instead
-FROM ghcr.io/pytorch/pytorch-nightly
+# FROM ghcr.io/pytorch/pytorch-nightly
+FROM ubuntu:latest
 
 # Set the working directory
 WORKDIR /app
 
-COPY ./packages-apt.txt .
+COPY ./docker/packages-apt.txt .
 
 # Install any additional system packages needed
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -18,10 +19,14 @@ RUN apt-get update && xargs -a packages-apt.txt apt-get install -y
 
 
 # Copy requirements.txt into the container
-COPY ./packages-python3.txt .
+COPY ./docker/packages-python3.txt .
 
 # Install any additional Python packages needed
+RUN apt-get update && apt-get install -y python3-pip
+
 RUN pip install --no-cache-dir -r packages-python3.txt
+
+RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # Copy the rest of the application code into the container
 COPY . .

@@ -4,7 +4,7 @@ FROM pytorch/pytorch:latest
 # Set the working directory
 WORKDIR /app
 
-COPY ./packages-apt.txt .
+COPY ./docker/packages-apt.txt .
 
 # Install any additional system packages needed
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteract
 RUN apt-get update && xargs -a packages-apt.txt apt-get install -y
 
 # Copy requirements.txt into the container
-COPY ./packages-python3.txt .
+COPY ./docker/packages-python3.txt .
 
 # Install any additional Python packages needed
 RUN pip install --no-cache-dir -r packages-python3.txt

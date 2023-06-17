@@ -2,10 +2,14 @@ version: '3.8'
 
 services:
   nano-gpt-service:
-    build: .
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile
+    tty: true
+    stdin_open: true
     image: pytorch-nanogpt
     container_name: nanogpt
-    volumes:
-      - ../:/app
+    # volumes:
+    #   - ../:/app
     ports:
       - "8888:8888"
